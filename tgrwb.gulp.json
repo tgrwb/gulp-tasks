@@ -1,8 +1,7 @@
 {
-	"dirSrc": "src",
-	"dirDist": "dist",
-	"dirAssets": "assets",
-	"webpack_src": "webpack",
+	"src": "src",
+	"dist": "dist",
+	"assets": "assets",
 	"php_namespace": "zero",
 	"php_wpTextdomain": "zero_lng"
 }

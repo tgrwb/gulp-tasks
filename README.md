@@ -21,7 +21,7 @@ npm i -D gulp gulp-rimraf
 
 ```
 {
-	"dirDist": "your/dist_directory"
+	"dist": "your/dist_directory"
 }
 ```
 
@@ -30,11 +30,11 @@ npm i -D gulp gulp-rimraf
 ```
 module.exports = (baseParams)=>{
 
-	const {dirDist} = baseParams;
+	const {dist} = baseParams;
 
 	return {
 		globs: [
-			`${dirDist}/*`
+			`${dist}/*`
 		]
 	};
 };
@@ -81,8 +81,8 @@ npm i -D gulp-rename gulp-newer gulp-frep
 
 ```
 {
-	"dirSrc": "src",
-	"dirDist": "dist",
+	"src": "src",
+	"dist": "dist",
 	"php_namespace": "your\\namespace",
 	"php_wpTextdomain": "your_textdomain"
 }
@@ -95,10 +95,10 @@ const path = require('path');
 
 module.exports = (baseParams)=>{
 
-	const {dirSrc, dirDist, php_namespace, php_wpTextdomain} = baseParams;
+	const {src, dist, php_namespace, php_wpTextdomain} = baseParams;
 
 	return {
-		globs: `${dirSrc}/**/*.@(php|xml)`,
+		globs: `${src}/**/*.@(php|xml)`,
 		rename: [ // rename file path
 			{pattern: /(?:^|.*\/)_([^\/]+(?:\/|$))/, replacement: '$1'}
 		],
@@ -106,7 +106,7 @@ module.exports = (baseParams)=>{
 			{pattern: /((?:\s|\\))src((?:;|\\))/g, replacement: `$1${php_namespace}$2`},
 			{pattern: /((?:'|"))tgrwb_textdomain((?:_admin)?(?:'|"))/g, replacement: `$1${php_wpTextdomain}$2`}
 		],
-		dist: path.join(dirDist)
+		dist: path.join(dist)
 	};
 };
 ```
@@ -152,10 +152,9 @@ npm i -D webpack webpack-stream glob
 
 ```
 {
-	"dirSrc": "src",
-	"dirDist": "dist",
-	"dirAssets": "assets",
-	"webpack_src": "src/webpack"
+	"src": "src",
+	"dist": "dist",
+	"assets": "assets"
 }
 ```
 
@@ -166,15 +165,15 @@ const path = require('path');
 
 module.exports = (baseParams)=>{
 
-	const {dirSrc, dirDist, dirAssets, webpack_src} = baseParams;
+	const {src, dist, assets} = baseParams;
 
 	return {
-		src: path.join(dirSrc),
-		glob: `${dirSrc}/**/${dirAssets}/scripts/*.js`,
+		src: path.join(src),
+		glob: `${src}/**/${assets}/scripts/*.js`,
 		ignore: [
 			`**/_*.js`
 		],
-		dist: path.join(dirDist)
+		dist: path.join(dist)
 	};
 };
 ```

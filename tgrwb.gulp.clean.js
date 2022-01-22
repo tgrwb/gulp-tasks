@@ -1,11 +1,11 @@
 
 module.exports = (baseParams)=>{
 
-	const {dirDist} = baseParams;
+	const {dist} = baseParams;
 
 	return {
 		globs: [
-			`${dirDist}/*`
+			`${dist}/*`
 		]
 	};
 };

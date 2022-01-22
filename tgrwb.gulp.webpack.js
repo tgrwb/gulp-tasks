@@ -3,14 +3,14 @@ const path = require('path');
 
 module.exports = (baseParams)=>{
 
-	const {dirSrc, dirDist, dirAssets, webpack_src} = baseParams;
+	const {src, dist, assets} = baseParams;
 
 	return {
-		src: path.join(dirSrc),
-		glob: `${dirSrc}/**/${dirAssets}/scripts/*.js`,
+		src: path.join(src),
+		glob: `${src}/**/${assets}/scripts/*.js`,
 		ignore: [
 			`**/_*.js`
 		],
-		dist: path.join(dirDist)
+		dist: path.join(dist)
 	};
 };
