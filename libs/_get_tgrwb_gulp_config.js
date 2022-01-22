@@ -19,6 +19,7 @@ module.exports = function (paramName) {
 	// Get params
 	const params = require('./../tgrwb.gulp.' + paramName)(baseParams);
 	params.cwd = cwd;
+	params._ = baseParams;
 	const customParams = customPath && fs.existsSync(customPath) ? require(customPath)(baseParams) : {};
 	for (let i in customParams) {
 		params[i] = customParams[i];
