@@ -1,4 +1,4 @@
-# gulp-tasks
+# tgrwb/gulp-tasks
 Gulp tasks for a quick project start.
 
 ## install
@@ -15,12 +15,6 @@ Easy directory cleanup
 
 ```
 npm i -D gulp gulp-rimraf
-```
-
-## gulpfile.js
-
-```
-const clean = require('@tgrwb/gulp-tasks').clean;
 ```
 
 ## tgrwb.gulp.json (optional)
@@ -46,18 +40,17 @@ module.exports = (baseParams)=>{
 };
 ```
 
-## Usage
+## Usage in gulpfile.js
 
 ```
-const clean = require('@tgrwb/gulp-tasks').clean;
-exports.clean = clean;
+exports.clean = require('@tgrwb/gulp-tasks/libs/clean');
 ```
 
 or
 
 ```
 const {series, parallel} = require('gulp');
-const clean = require('@tgrwb/gulp-tasks').clean;
+const clean = require('@tgrwb/gulp-tasks/libs/clean');
 
 exports.build = series(
 	clean,
@@ -69,6 +62,146 @@ exports.build = series(
 	parallel(
 		...,
 		...,
+		...
+	)
+);
+```
+
+
+# php
+Copy, rename and replace for *.php
+
+## install
+
+```
+npm i -D gulp-rename gulp-newer gulp-frep
+```
+
+## tgrwb.gulp.json (optional)
+
+```
+{
+	"dirSrc": "src",
+	"dirDist": "dist",
+	"php_namespace": "your\\namespace",
+	"php_wpTextdomain": "your_textdomain"
+}
+```
+
+## tgrwb.gulp.php.js (optional)
+
+```
+const path = require('path');
+
+module.exports = (baseParams)=>{
+
+	const {dirSrc, dirDist, php_namespace, php_wpTextdomain} = baseParams;
+
+	return {
+		globs: `${dirSrc}/**/*.@(php|xml)`,
+		rename: [ // rename file path
+			{pattern: /(?:^|.*\/)_([^\/]+(?:\/|$))/, replacement: '$1'}
+		],
+		frep: [ // replace in files
+			{pattern: /((?:\s|\\))src((?:;|\\))/g, replacement: `$1${php_namespace}$2`},
+			{pattern: /((?:'|"))tgrwb_textdomain((?:_admin)?(?:'|"))/g, replacement: `$1${php_wpTextdomain}$2`}
+		],
+		dist: path.join(dirDist)
+	};
+};
+```
+
+## Usage in gulpfile.js
+
+```
+exports.php = require('@tgrwb/gulp-tasks/libs/php');
+```
+
+or
+
+```
+const {series, parallel} = require('gulp');
+const php = require('@tgrwb/gulp-tasks/libs/php');
+
+exports.build = series(
+	parallel(
+		...,
+		...,
+		...
+	),
+	parallel(
+		...,
+		...,
+		php,
+		...
+	)
+);
+```
+
+
+# webpack
+Run webpack in gulpfile.js
+
+## install
+
+```
+npm i -D webpack webpack-stream glob
+```
+
+## tgrwb.gulp.json (optional)
+
+```
+{
+	"dirSrc": "src",
+	"dirDist": "dist",
+	"dirAssets": "assets",
+	"webpack_src": "src/webpack"
+}
+```
+
+## tgrwb.gulp.php.js (optional)
+
+```
+const path = require('path');
+
+module.exports = (baseParams)=>{
+
+	const {dirSrc, dirDist, dirAssets, webpack_src} = baseParams;
+
+	return {
+		src: path.join(dirSrc),
+		glob: `${dirSrc}/**/${dirAssets}/scripts/*.js`,
+		ignore: [
+			`**/_*.js`
+		],
+		dist: path.join(dirDist)
+	};
+};
+```
+
+## Usage in gulpfile.js
+
+```
+exports.webpack_build = require('@tgrwb/gulp-tasks/libs/webpack').build;
+exports.webpack_watch = require('@tgrwb/gulp-tasks/libs/webpack').watch;
+```
+
+or
+
+```
+const {series, parallel} = require('gulp');
+const webpack_build = require('@tgrwb/gulp-tasks/libs/webpack').build;
+
+exports.build = series(
+	parallel(
+		...,
+		...,
+		...
+	),
+	parallel(
+		...,
+		...,
+		webpack_build,
 		...
 	)
 );

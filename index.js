@@ -1,6 +1,2 @@
 
-module.exports = {
-	clean: require('./lib/clean'),
-	php: require('./lib/php'),
-	webpack: require('./lib/webpack')
-};
+module.exports = require('@tgrwb/gulp-version');
