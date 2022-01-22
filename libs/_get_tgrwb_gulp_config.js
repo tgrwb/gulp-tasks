@@ -2,28 +2,32 @@
 const fs = require('fs');
 const path = require('path');
 
-module.exports = function (paramName) {
+module.exports = function (moduleName) {
 
-	// Search path
-	const cwd = process.cwd();
-	const basePath = path.resolve(cwd, 'tgrwb.gulp');
-	const customPath = path.resolve(cwd, 'tgrwb.gulp.' + paramName);
+	let cwd = process.cwd();
+	let params = {};
 
 	// Get base params
-	const baseParams = require('./../tgrwb.gulp');
-	const customBaseParams = basePath && fs.existsSync(basePath) ? require(basePath) : {};
-	for (let i in customBaseParams) {
-		baseParams[i] = customBaseParams[i];
+	let json = require('./../tgrwb.gulp.json');
+	let pathToJson = path.resolve(cwd, 'tgrwb.gulp.json');
+	let customJson = fs.existsSync(pathToJson) ? require(pathToJson) : {};
+	for (let i in customJson) {
+		json[i] = customJson[i];
 	}
 
 	// Get params
-	const params = require('./../tgrwb.gulp.' + paramName)(baseParams);
-	params.cwd = cwd;
-	params._ = baseParams;
-	const customParams = customPath && fs.existsSync(customPath) ? require(customPath)(baseParams) : {};
-	for (let i in customParams) {
-		params[i] = customParams[i];
+	if (moduleName) {
+		let pathToParams = path.resolve(cwd, 'tgrwb.gulp.' + moduleName + '.js');
+		params = require('./../tgrwb.gulp.' + moduleName + '.js')(json);
+		let customParams = fs.existsSync(pathToParams) ? require(pathToParams)(json) : {};
+		for (let i in customParams) {
+			params[i] = customParams[i];
+		}
+	} else {
+		params = json;
 	}
+
+	params.cwd = cwd;
 
 	return params;
 };
