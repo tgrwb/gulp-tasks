@@ -205,3 +205,85 @@ exports.build = series(
 	)
 );
 ```
+
+
+# copy
+Copy files
+
+## install
+
+```
+npm i -D gulp-rename gulp-flatmap gulp-newer
+```
+
+## tgrwb.gulp.json (optional)
+
+```
+{
+	"src": "src",
+	"dist": "dist"
+}
+```
+
+## tgrwb.gulp.copy.js (optional)
+
+```
+
+const path = require('path');
+
+module.exports = (baseParams)=>{
+
+    const {src, dist} = baseParams;
+
+    return {
+        globs: `${src}/**/.tgrwb.gulp.copy.json`,
+        rename: [
+			{pattern: /(?:^|.*\/)_([^\/]+(?:\/|$))/, replacement: '$1'}
+        ],
+        dist: path.join(dist)
+    };
+};
+
+
+```
+
+## src/.tgrwb.gulp.copy.json
+
+```
+{
+	"files": [
+		"screenshot.png",
+		"images/**",
+		"vendor/**",
+		"style.css"
+	]
+}
+
+```
+
+## Usage in gulpfile.js
+
+```
+exports.copy = require('@tgrwb/gulp-tasks/libs/copy');
+```
+
+or
+
+```
+const {series, parallel} = require('gulp');
+const copy = require('@tgrwb/gulp-tasks/libs/copy');
+
+exports.build = series(
+	parallel(
+		...,
+		...,
+		...
+	),
+	parallel(
+		...,
+		...,
+		copy,
+		...
+	)
+);
+```
