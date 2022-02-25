@@ -1,8 +1,8 @@
 {
-	"files": [
-		"screenshot.png",
-		"rr/**",
-		"vendor/**",
-		"style.css"
-	]
+    "files": [
+        "screenshot.png",
+        "rr/**",
+        "vendor/**",
+        "style.css"
+    ]
 }

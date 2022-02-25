@@ -1,7 +1,7 @@
 {
-	"src": "src",
-	"dist": "dist",
-	"assets": "assets",
-	"php_namespace": "zero",
-	"php_wpTextdomain": "zero_lng"
+    "src": "src",
+    "dist": "dist",
+    "assets": "assets",
+    "php_namespace": "zero",
+    "php_wpTextdomain": "zero_lng"
 }

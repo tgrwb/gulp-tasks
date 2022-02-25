@@ -145,7 +145,7 @@ Run webpack in gulpfile.js
 ## install
 
 ```
-npm i -D webpack webpack-stream glob
+npm i -D webpack glob webpack-stream
 ```
 
 ## tgrwb.gulp.json (optional)
@@ -158,7 +158,7 @@ npm i -D webpack webpack-stream glob
 }
 ```
 
-## tgrwb.gulp.php.js (optional)
+## tgrwb.gulp.webpack.js (optional)
 
 ```
 const path = require('path');
@@ -283,6 +283,73 @@ exports.build = series(
 		...,
 		...,
 		copy,
+		...
+	)
+);
+```
+
+
+# less
+Run less in gulpfile.js
+
+## install
+
+```
+npm i -D less gulp-clean-css gulp-ignore gulp-less gulp-postcss gulp-rename gulp-sourcemaps less-plugin-npm-import gulp-rev gulp-clone
+```
+
+## tgrwb.gulp.json (optional)
+
+```
+{
+	"src": "src",
+	"dist": "dist",
+	"assets": "assets"
+}
+```
+
+## tgrwb.gulp.less.js (optional)
+
+```
+const path = require('path');
+
+module.exports = (baseParams)=>{
+
+	const {src, dist, assets} = baseParams;
+
+	return {
+		src: path.join(src),
+		glob: `${src}/**/${assets}/styles/*.js`,
+		ignore: [
+			`**/_*.js`
+		],
+		dist: path.join(dist)
+	};
+};
+```
+
+## Usage in gulpfile.js
+
+```
+exports.less = require('@tgrwb/gulp-tasks/libs/less');
+```
+
+or
+
+```
+const {series, parallel} = require('gulp');
+const less = require('@tgrwb/gulp-tasks/libs/less');
+
+exports.build = series(
+	parallel(
+		...,
+		...,
+		...
+	),
+	parallel(
+		...,
+		...,
+		less,
 		...
 	)
 );

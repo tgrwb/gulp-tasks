@@ -1,9 +1,9 @@
 
 exports.default = function (cb) {
-	for (var i in exports) {
-		console.log('gulp ' + i);
-	}
-	cb();
+    for (var i in exports) {
+        console.log('gulp ' + i);
+    }
+    cb();
 };
 
 //

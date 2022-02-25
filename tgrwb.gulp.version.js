@@ -1,10 +1,10 @@
 
 module.exports = (baseParams)=>{
 
-	const {dirSrc} = baseParams;
+    const {dirSrc} = baseParams;
 
-	return {
-		paths: [
-		]
-	};
+    return {
+        paths: [
+        ]
+    };
 };
