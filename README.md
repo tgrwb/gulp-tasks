@@ -145,7 +145,7 @@ Run webpack in gulpfile.js
 ## install
 
 ```
-npm i -D webpack glob webpack-stream
+npm i -D webpack glob webpack-stream gulp-ignore gulp-uglify-es gulp-sourcemaps gulp-rev gulp-if
 ```
 
 ## tgrwb.gulp.json (optional)
@@ -295,7 +295,7 @@ Run less in gulpfile.js
 ## install
 
 ```
-npm i -D less gulp-clean-css gulp-ignore gulp-less gulp-postcss gulp-rename gulp-sourcemaps less-plugin-npm-import gulp-rev gulp-clone
+npm i -D less gulp-clean-css gulp-ignore gulp-less gulp-postcss gulp-rename gulp-sourcemaps less-plugin-npm-import gulp-rev gulp-clone gulp-if
 ```
 
 ## tgrwb.gulp.json (optional)

@@ -11,6 +11,7 @@ const GulpRename = require('gulp-rename'); // Переименование фа�
 const GulpSourcemaps = require('gulp-sourcemaps');
 const GulpRev = require('gulp-rev');
 const GylpClone = require('gulp-clone');
+const GulpIf = require('gulp-if');
 
 const GylpCloneSink = GylpClone.sink();
 
@@ -23,7 +24,6 @@ module.exports = function () {
     const postcssPlugins = fs.existsSync(pathToParams) ? require(pathToParams) : {};
     //
     return src(params.glob, {cwd: params.cwd, ignore: params.ignore})
-        .pipe(GulpSourcemaps.init())
         .pipe(GulpLess({
             sourceMap: true,
             rewriteUrls: 'local',
@@ -36,18 +36,18 @@ module.exports = function () {
             ]
         }))
         .pipe(GulpPostcss(postcssPlugins))
-        .pipe(GulpSourcemaps.write('.'))
         .pipe(GylpCloneSink)
         //
-        .pipe(GulpIgnore.exclude('*.map'))
         .pipe(GulpRename({extname: '.min.css'}))
         .pipe(GulpCleanCSS({
             inline: ['none']
         }))
-//        .pipe(GulpSourcemaps.write('.')) // Включить для добавления .map для сжатых файлов
         //
         .pipe(GylpCloneSink.tap())
         .pipe(GulpRev())
+        .pipe(GulpSourcemaps.init())
+        .pipe(GulpIf(/(?<!\.min)\.css$/, GulpSourcemaps.write('.')))
+        .pipe(GulpIf(/\.min\.css$/, GulpSourcemaps.write('.'))) // Включить для добавления .map для сжатых файлов
         .pipe(dest(params.dist))
         .pipe(GulpIgnore.exclude('*.map'))
         .pipe(GulpRev.manifest('manifest.styles.json'))
