@@ -1,6 +1,8 @@
 
 const path = require('path');
+
 const {src, dest} = require('gulp');
+
 const GulpRename = require('gulp-rename'); // Переименование файлов
 const GulpFlatmap = require('gulp-flatmap'); // Обрабатывает содержимое файла
 const GulpNewer = require('gulp-newer'); // Проверяет время изменения конечного файла

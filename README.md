@@ -4,7 +4,7 @@ Gulp tasks for a quick project start.
 ## install
 
 ```
-npm i -D tgrwb/gulp-tasks
+npm i -D gulp tgrwb/gulp-tasks
 ```
 
 
@@ -14,7 +14,7 @@ Easy directory cleanup
 ## install
 
 ```
-npm i -D gulp gulp-rimraf
+npm i -D gulp-rimraf
 ```
 
 ## tgrwb.gulp.json (optional)
@@ -145,7 +145,7 @@ Run webpack in gulpfile.js
 ## install
 
 ```
-npm i -D webpack glob webpack-stream gulp-ignore gulp-uglify-es gulp-sourcemaps gulp-rev gulp-if
+npm i -D webpack glob webpack-stream gulp-ignore gulp-uglify-es gulp-sourcemaps tgrwb/gulp-rev gulp-if
 ```
 
 ## tgrwb.gulp.json (optional)
@@ -295,7 +295,7 @@ Run less in gulpfile.js
 ## install
 
 ```
-npm i -D less gulp-clean-css gulp-ignore gulp-less gulp-postcss gulp-rename gulp-sourcemaps less-plugin-npm-import gulp-rev gulp-clone gulp-if
+npm i -D event-stream less less-plugin-npm-import gulp-clean-css gulp-ignore gulp-less gulp-postcss gulp-rename gulp-sourcemaps tgrwb/gulp-rev gulp-clone gulp-if
 ```
 
 ## tgrwb.gulp.json (optional)

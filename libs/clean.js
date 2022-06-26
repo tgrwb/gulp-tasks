@@ -1,5 +1,6 @@
 
 const {src} = require('gulp');
+
 const GulpRimraf = require('gulp-rimraf'); // Удаление файлов
 
 module.exports = function () {

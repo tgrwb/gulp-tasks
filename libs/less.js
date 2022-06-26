@@ -2,7 +2,11 @@
 const fs = require('fs');
 const path = require('path');
 
+const EventStream = require('event-stream');
+const LessPluginNpmImport = require('less-plugin-npm-import');
+
 const {src, dest} = require('gulp');
+
 const GulpCleanCSS = require('gulp-clean-css');
 const GulpIgnore = require('gulp-ignore');
 const GulpLess = require('gulp-less');
@@ -13,17 +17,13 @@ const GulpRev = require('gulp-rev');
 const GylpClone = require('gulp-clone');
 const GulpIf = require('gulp-if');
 
-const GylpCloneSink = GylpClone.sink();
-
-const LessPluginNpmImport = require("less-plugin-npm-import");
-
 module.exports = function () {
     const params = require('./_get_tgrwb_gulp_config.js')('less');
-    //
+
     const pathToParams = path.resolve(params.cwd, 'postcss.plugins.js');
     const postcssPlugins = fs.existsSync(pathToParams) ? require(pathToParams) : {};
-    //
-    return src(params.glob, {cwd: params.cwd, ignore: params.ignore})
+
+    let css = src(params.glob, {cwd: params.cwd, ignore: params.ignore})
         .pipe(GulpLess({
             sourceMap: true,
             rewriteUrls: 'local',
@@ -35,15 +35,15 @@ module.exports = function () {
                 })
             ]
         }))
-        .pipe(GulpPostcss(postcssPlugins))
-//        .pipe(GylpCloneSink)
-//        //
-//        .pipe(GulpRename({extname: '.min.css'}))
-//        .pipe(GulpCleanCSS({
-//            inline: ['none']
-//        }))
-//        //
-//        .pipe(GylpCloneSink.tap())
+        .pipe(GulpPostcss(postcssPlugins));
+
+    let min_css = css.pipe(GylpClone())
+        .pipe(GulpRename({extname: '.min.css'}))
+        .pipe(GulpCleanCSS({
+            inline: ['none']
+        }));
+
+    return EventStream.merge(css, min_css)
         .pipe(GulpRev())
         .pipe(GulpSourcemaps.init())
         .pipe(GulpIf(/(?<!\.min)\.css$/, GulpSourcemaps.write('.')))

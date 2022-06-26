@@ -1,12 +1,14 @@
 
 /* global process */
 
-const {dest} = require('gulp');
-
 const fs = require('fs');
 const path = require('path');
+
 const Glob = require('glob'); // Возвращает список файлов по заданным параметрам
 const WebpackSream = require('webpack-stream'); // Запуск WebPack
+
+const {dest} = require('gulp');
+
 const GulpIgnore = require('gulp-ignore');
 const GulpUglifyEs = require('gulp-uglify-es').default;
 const GulpSourcemaps = require('gulp-sourcemaps');
@@ -20,35 +22,12 @@ module.exports = {
 
 function build(cb) {
     const params = require('./_get_tgrwb_gulp_config.js')('webpack');
-    return _webpack(cb, params)
-        .pipe(GulpRev())
-        .pipe(GulpSourcemaps.init())
-        .pipe(GulpIf(/.*\.min\.js$/, GulpUglifyEs({
-            output: {
-                comments: false
-            }
-        })))
-        .pipe(GulpIf(/(?<!\.min)\.js$/, GulpSourcemaps.write('.')))
-        .pipe(GulpIf(/\.min\.js$/, GulpSourcemaps.write('.'))) // Включить для добавления .map для сжатых файлов
-        .pipe(dest(params.dist))
-        .pipe(GulpIgnore.exclude('*.map'))
-        .pipe(GulpRev.manifest('manifest.scripts.json'))
-        .pipe(dest(params.dist))
-        ;
+    return _webpack(cb, params);
 }
 
 function watch(cb) {
     const params = require('./_get_tgrwb_gulp_config.js')('webpack');
-    return _webpack(cb, params, true)
-        .pipe(GulpSourcemaps.init())
-        .pipe(GulpIf(/.*\.min\.js$/, GulpUglifyEs({
-            output: {
-                comments: false
-            }
-        })))
-        .pipe(GulpIf(/.*\.js$/, GulpSourcemaps.write('.')))
-        .pipe(dest(params.dist))
-        ;
+    return _webpack(cb, params, true);
 }
 /**
  *
@@ -94,7 +73,21 @@ function _webpack(cb, params, isWatch = false) {
 //            config.entry[new_name + '.min'] = files[i];
         }
 
-        return WebpackSream(config);
+        return WebpackSream(config)
+            .pipe(GulpRev())
+            .pipe(GulpSourcemaps.init())
+            .pipe(GulpIf(/.*\.min\.js$/, GulpUglifyEs({
+                output: {
+                    comments: false
+                }
+            })))
+            .pipe(GulpIf(/(?<!\.min)\.js$/, GulpSourcemaps.write('.')))
+            .pipe(GulpIf(/\.min\.js$/, GulpSourcemaps.write('.'))) // Включить для добавления .map для сжатых файлов
+            .pipe(dest(params.dist))
+            .pipe(GulpIgnore.exclude('*.map'))
+            .pipe(GulpRev.manifestAsync('manifest.scripts.json'))
+            .pipe(dest(params.dist))
+            ;
     } else {
         cb();
 }
