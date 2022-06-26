@@ -32,7 +32,7 @@ function build(cb) {
         .pipe(GulpIf(/\.min\.js$/, GulpSourcemaps.write('.'))) // Включить для добавления .map для сжатых файлов
         .pipe(dest(params.dist))
         .pipe(GulpIgnore.exclude('*.map'))
-        .pipe(GulpRev.manifest('manifest.styles.json'))
+        .pipe(GulpRev.manifest('manifest.scripts.json'))
         .pipe(dest(params.dist))
         ;
 }

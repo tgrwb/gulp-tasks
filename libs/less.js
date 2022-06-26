@@ -36,14 +36,14 @@ module.exports = function () {
             ]
         }))
         .pipe(GulpPostcss(postcssPlugins))
-        .pipe(GylpCloneSink)
-        //
-        .pipe(GulpRename({extname: '.min.css'}))
-        .pipe(GulpCleanCSS({
-            inline: ['none']
-        }))
-        //
-        .pipe(GylpCloneSink.tap())
+//        .pipe(GylpCloneSink)
+//        //
+//        .pipe(GulpRename({extname: '.min.css'}))
+//        .pipe(GulpCleanCSS({
+//            inline: ['none']
+//        }))
+//        //
+//        .pipe(GylpCloneSink.tap())
         .pipe(GulpRev())
         .pipe(GulpSourcemaps.init())
         .pipe(GulpIf(/(?<!\.min)\.css$/, GulpSourcemaps.write('.')))
