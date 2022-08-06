@@ -6,6 +6,7 @@ const path = require('path');
 
 const Glob = require('glob'); // Возвращает список файлов по заданным параметрам
 const WebpackSream = require('webpack-stream'); // Запуск WebPack
+const EventStream = require('event-stream');
 
 const {dest} = require('gulp');
 
@@ -14,6 +15,8 @@ const GulpUglifyEs = require('gulp-uglify-es').default;
 const GulpSourcemaps = require('gulp-sourcemaps');
 const GulpRev = require('gulp-rev');
 const GulpIf = require('gulp-if');
+const GylpClone = require('gulp-clone');
+const GulpRename = require('gulp-rename'); // Переименование файлов
 
 module.exports = {
     build,
@@ -48,10 +51,15 @@ function _webpack(cb, params, isWatch = false) {
         // Get webpack config
         const config = require(webpackConfigPath);
 
-        config.mode = 'production';
+//        config.mode = 'production';
+        config.mode = 'development';
         config.watch = isWatch;
         config.entry = {};
-        config.devtool = false;
+        config.output = {
+            publicPath: '',
+            filename: '[name].js'
+        };
+        config.devtool = 'inline-source-map';
         config.optimization = config.optimization || {};
         config.optimization.minimizer = [];
 
@@ -70,12 +78,16 @@ function _webpack(cb, params, isWatch = false) {
             let rel = path.relative(src, dir);
             let new_name = path.join(rel, name).replace(/\\/g, '/');
             config.entry[new_name] = files[i];
-//            config.entry[new_name + '.min'] = files[i];
         }
 
-        return WebpackSream(config)
+        const js = WebpackSream(config);
+
+        const jsMin = js.pipe(GylpClone())
+            .pipe(GulpRename({extname: '.min.js'}));
+
+        return EventStream.merge(js, jsMin)
             .pipe(GulpRev())
-            .pipe(GulpSourcemaps.init())
+            .pipe(GulpSourcemaps.init({loadMaps: true}))
             .pipe(GulpIf(/.*\.min\.js$/, GulpUglifyEs({
                 output: {
                     comments: false

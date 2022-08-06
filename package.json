@@ -1,6 +1,6 @@
 {
   "name": "@tgrwb/gulp-tasks",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Gulp tasks for a quick project start.",
   "main": "index.js",
   "scripts": {

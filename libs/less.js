@@ -21,9 +21,10 @@ module.exports = function () {
     const params = require('./_get_tgrwb_gulp_config.js')('less');
 
     const pathToParams = path.resolve(params.cwd, 'postcss.plugins.js');
-    const postcssPlugins = fs.existsSync(pathToParams) ? require(pathToParams) : {};
+    const postcssPlugins = fs.existsSync(pathToParams) ? require(pathToParams) : null;
 
     let css = src(params.glob, {cwd: params.cwd, ignore: params.ignore})
+        .pipe(GulpSourcemaps.init())
         .pipe(GulpLess({
             sourceMap: true,
             rewriteUrls: 'local',
@@ -35,17 +36,19 @@ module.exports = function () {
                 })
             ]
         }))
-        .pipe(GulpPostcss(postcssPlugins));
+        ;
 
-    let min_css = css.pipe(GylpClone())
-        .pipe(GulpRename({extname: '.min.css'}))
+    let cssMin = css
+        .pipe(GylpClone())
+        .pipe(GulpPostcss())
         .pipe(GulpCleanCSS({
             inline: ['none']
-        }));
+        }))
+        .pipe(GulpRename({suffix: '.min'}))
+        ;
 
-    return EventStream.merge(css, min_css)
+    return EventStream.merge(css, cssMin)
         .pipe(GulpRev())
-        .pipe(GulpSourcemaps.init())
         .pipe(GulpIf(/(?<!\.min)\.css$/, GulpSourcemaps.write('.')))
         .pipe(GulpIf(/\.min\.css$/, GulpSourcemaps.write('.'))) // Включить для добавления .map для сжатых файлов
         .pipe(dest(params.dist))
