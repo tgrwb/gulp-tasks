@@ -295,7 +295,7 @@ Run less in gulpfile.js
 ## install
 
 ```
-npm i -D event-stream less less-plugin-npm-import gulp-clean-css gulp-ignore gulp-less gulp-postcss gulp-rename gulp-sourcemaps tgrwb/gulp-rev gulp-clone gulp-if
+npm i -D event-stream less less-plugin-npm-import gulp-clean-css gulp-ignore gulp-less gulp-postcss gulp-rename gulp-sourcemaps tgrwb/gulp-rev gulp-clone gulp-if gulp-remove-duplicate-lines
 ```
 
 ## tgrwb.gulp.json (optional)

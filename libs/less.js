@@ -16,6 +16,7 @@ const GulpSourcemaps = require('gulp-sourcemaps');
 const GulpRev = require('gulp-rev');
 const GylpClone = require('gulp-clone');
 const GulpIf = require('gulp-if');
+const GulpRemoveDuplicateLines = require('gulp-remove-duplicate-lines');
 
 module.exports = function () {
     const params = require('./_get_tgrwb_gulp_config.js')('less');
@@ -36,11 +37,14 @@ module.exports = function () {
                 })
             ]
         }))
+        .pipe(GulpRemoveDuplicateLines({
+            include: /^@import/g
+        }))
+        .pipe(GulpPostcss())
         ;
 
     let cssMin = css
         .pipe(GylpClone())
-        .pipe(GulpPostcss())
         .pipe(GulpCleanCSS({
             inline: ['none']
         }))
